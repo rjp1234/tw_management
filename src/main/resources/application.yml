@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: eyes-tw-management
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # main DB config
+  datasource:
+    schema: classpath:sql/schema.sql
+    initialize: true
+    continue-on-error: true
+    name: index_statistics
+    username: tw
+    password: tw123!@#
+    url: jdbc:mysql://192.168.2.70:3306/index_statistics?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=true&createDatabaseIfNotExist=true&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    tomcat:
+      max-active: 20
+      max-idle: 20
+      max-wait: 60000
+      min-idle: 1
+
+  # second DB config
+  datasource-cas:
+    username: tw
+    password: tw123!@#
+    url: jdbc:mysql://192.168.2.70:3306/cas_t?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=true&createDatabaseIfNotExist=true&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    tomcat:
+      max-active: 20
+      max-idle: 20
+      max-wait: 60000
+      min-idle: 1
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  path: /data/log/
+  level:
+    root: info
+  config: classpath:logback-spring.xml
+
+#端口号
+server:
+  port: 9090
+
+#熔断的开关
+feign:
+  hystrix:
+    enabled: true
+
+#熔断触发的时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+
+#针对Feign服务的重试及超时设置
+ribbon:
+  ReadTimeout: 100000
+  ConnectTimeout: 100000
+  OKToRetryOnAllOperations: false
+  MaxAutoRetries: 2
+  MaxAutoRetriesNextServer: 2
